@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class EmployeService {
 
@@ -30,7 +31,7 @@ public class EmployeService {
     public void delete(Long id) {
         repo.deleteById(id);
     }
-    
+
     public Employe getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Employe not found"));
@@ -41,16 +42,45 @@ public class EmployeService {
         Employe existing = repo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Employe not found"));
 
+        applyUpdates(existing, updated);
+
+        return repo.save(existing);
+    }
+
+    public Employe getByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Employe not found"));
+    }
+
+    public Employe updateByEmail(String email, Employe updated) {
+
+        Employe existing = repo.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Employe not found"));
+
+        applyUpdatesSelf(existing, updated);
+
+        return repo.save(existing);
+    }
+
+    private void applyUpdates(Employe existing, Employe updated) {
+
         existing.setNom(updated.getNom());
         existing.setEmail(updated.getEmail());
         existing.setRole(updated.getRole());
         existing.setEquipe(updated.getEquipe());
 
-        // update password seulement si envoyé
         if (updated.getPassword() != null && !updated.getPassword().isBlank()) {
             existing.setPassword(encoder.encode(updated.getPassword()));
         }
+    }
 
-        return repo.save(existing);
+    private void applyUpdatesSelf(Employe existing, Employe updated) {
+
+        existing.setNom(updated.getNom());
+        existing.setEquipe(updated.getEquipe());
+
+        if (updated.getPassword() != null && !updated.getPassword().isBlank()) {
+            existing.setPassword(encoder.encode(updated.getPassword()));
+        }
     }
 }
