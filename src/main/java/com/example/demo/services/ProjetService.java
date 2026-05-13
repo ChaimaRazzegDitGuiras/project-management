@@ -1,10 +1,13 @@
 package com.example.demo.services;
 
 import com.example.demo.entities.Projet;
+import com.example.demo.exceptions.ProjetAlreadyExistsException;
+import com.example.demo.exceptions.ProjetNotFoundException;
 import com.example.demo.repositories.ProjetRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjetService {
@@ -15,24 +18,61 @@ public class ProjetService {
         this.projetRepository = projetRepository;
     }
 
+    // GET ALL
     public List<Projet> getAll() {
         return projetRepository.findAll();
     }
 
+    // GET BY ID
     public Projet getById(Long id) {
-        return projetRepository.findById(id).orElse(null);
+
+        return projetRepository.findById(id)
+                .orElseThrow(() ->
+                        new ProjetNotFoundException("Projet not found"));
     }
 
+    // CREATE
     public Projet save(Projet projet) {
+
+        if (projetRepository.findByNom(projet.getNom()).isPresent()) {
+            throw new ProjetAlreadyExistsException("Projet already exists");
+        }
+
         return projetRepository.save(projet);
     }
 
+    // UPDATE
     public Projet update(Long id, Projet projet) {
-        projet.setId(id);
-        return projetRepository.save(projet);
+
+        Projet existing = projetRepository.findById(id)
+                .orElseThrow(() ->
+                        new ProjetNotFoundException("Projet not found"));
+
+        Optional<Projet> projetWithSameName =
+                projetRepository.findByNom(projet.getNom());
+
+        if (projetWithSameName.isPresent()
+                && !projetWithSameName.get().getId().equals(id)) {
+
+            throw new ProjetAlreadyExistsException("Projet already exists");
+        }
+
+        existing.setNom(projet.getNom());
+        existing.setDateDebut(projet.getDateDebut());
+        existing.setDateFin(projet.getDateFin());
+        existing.setBudget(projet.getBudget());
+        existing.setStatut(projet.getStatut());
+
+        return projetRepository.save(existing);
     }
 
+    // DELETE
     public void delete(Long id) {
-        projetRepository.deleteById(id);
+
+        Projet existing = projetRepository.findById(id)
+                .orElseThrow(() ->
+                        new ProjetNotFoundException("Projet not found"));
+
+        projetRepository.delete(existing);
     }
 }
