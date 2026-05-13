@@ -14,21 +14,21 @@ public class Employe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le nom est obligatoire")
+    @NotBlank
     private String nom;
 
-    @NotBlank(message = "L'email est obligatoire")
+    @NotBlank
+    @Column(unique = true)
     private String email;
 
-    @NotBlank(message = "Le mot de passe est obligatoire")
+    @NotBlank
     private String password;
 
-    @NotBlank(message = "Le rôle est obligatoire")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private String equipe;
 
-    // Un employé peut avoir plusieurs tâches
     @OneToMany(mappedBy = "employe")
     private List<Tache> taches;
 }

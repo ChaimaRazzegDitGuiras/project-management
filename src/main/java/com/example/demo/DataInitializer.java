@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entities.Employe;
+import com.example.demo.entities.Role;
 import com.example.demo.repositories.EmployeRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,8 @@ public class DataInitializer {
                 admin.setNom("Admin");
                 admin.setEmail("admin@gmail.com");
                 admin.setPassword(encoder.encode("admin.123"));
-                admin.setRole("ADMIN");
+
+                admin.setRole(Role.ADMIN); 
 
                 repo.save(admin);
             }

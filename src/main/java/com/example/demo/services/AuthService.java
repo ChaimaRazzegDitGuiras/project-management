@@ -31,6 +31,9 @@ public class AuthService {
             throw new BadCredentialsException("Password incorrect");
         }
 
-        return jwtUtil.generateToken(user.getEmail(), user.getRole());
+        return jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole().name()
+        );
     }
 }

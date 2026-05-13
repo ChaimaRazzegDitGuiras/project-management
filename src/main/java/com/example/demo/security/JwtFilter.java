@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,11 +25,11 @@ public class JwtFilter extends GenericFilter {
 
         HttpServletRequest req = (HttpServletRequest) request;
 
-        String authHeader = req.getHeader("Authorization");
+        String header = req.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (header != null && header.startsWith("Bearer ")) {
 
-            String token = authHeader.substring(7);
+            String token = header.substring(7);
 
             if (jwtUtil.validateToken(token)) {
 
@@ -39,7 +40,9 @@ public class JwtFilter extends GenericFilter {
                         new UsernamePasswordAuthenticationToken(
                                 email,
                                 null,
-                                Collections.emptyList()
+                                Collections.singletonList(
+                                        new SimpleGrantedAuthority("ROLE_" + role)
+                                )
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
