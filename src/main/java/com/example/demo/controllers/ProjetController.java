@@ -20,21 +20,18 @@ public class ProjetController {
         this.projetService = projetService;
     }
 
-    // GET ALL
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<Projet> getAll() {
         return projetService.getAll();
     }
 
-    // GET BY ID
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Projet getById(@PathVariable Long id) {
         return projetService.getById(id);
     }
 
-    // CREATE
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Projet save(@Valid @RequestBody Projet projet) {
@@ -42,7 +39,6 @@ public class ProjetController {
     }
 
 
-    // UPDATE
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Projet update(@PathVariable Long id,
@@ -50,7 +46,6 @@ public class ProjetController {
         return projetService.update(id, projet);
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id) {

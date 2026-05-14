@@ -7,6 +7,8 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 public class Projet {
@@ -28,5 +30,6 @@ public class Projet {
 
     // Un projet contient plusieurs tâches
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Tache> taches;
 }

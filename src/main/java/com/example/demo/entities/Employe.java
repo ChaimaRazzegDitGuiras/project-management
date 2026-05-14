@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 public class Employe {
@@ -22,6 +24,7 @@ public class Employe {
     private String email;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -30,5 +33,6 @@ public class Employe {
     private String equipe;
 
     @OneToMany(mappedBy = "employe")
+    @JsonIgnore
     private List<Tache> taches;
 }

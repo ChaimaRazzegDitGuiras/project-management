@@ -18,12 +18,10 @@ public class ProjetService {
         this.projetRepository = projetRepository;
     }
 
-    // GET ALL
     public List<Projet> getAll() {
         return projetRepository.findAll();
     }
 
-    // GET BY ID
     public Projet getById(Long id) {
 
         return projetRepository.findById(id)
@@ -31,7 +29,6 @@ public class ProjetService {
                         new ProjetNotFoundException("Projet not found"));
     }
 
-    // CREATE
     public Projet save(Projet projet) {
 
         if (projetRepository.findByNom(projet.getNom()).isPresent()) {
@@ -41,7 +38,6 @@ public class ProjetService {
         return projetRepository.save(projet);
     }
 
-    // UPDATE
     public Projet update(Long id, Projet projet) {
 
         Projet existing = projetRepository.findById(id)
@@ -66,7 +62,6 @@ public class ProjetService {
         return projetRepository.save(existing);
     }
 
-    // DELETE
     public void delete(Long id) {
 
         Projet existing = projetRepository.findById(id)
