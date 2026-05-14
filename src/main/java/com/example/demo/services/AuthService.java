@@ -27,6 +27,10 @@ public class AuthService {
         Employe user = repo.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
+        System.out.println("PASSWORD SAISI : " + password);
+        System.out.println("PASSWORD BDD : " + user.getPassword());
+        System.out.println("MATCH : " + encoder.matches(password, user.getPassword()));
+
         if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Password incorrect");
         }

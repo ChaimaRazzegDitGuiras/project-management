@@ -24,7 +24,6 @@ public class Employe {
     private String email;
 
     @NotBlank
-    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
