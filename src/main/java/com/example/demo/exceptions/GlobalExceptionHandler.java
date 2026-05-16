@@ -36,10 +36,32 @@ public class GlobalExceptionHandler {
         );
     }
     
- // 404 - projet not found
+    // 404 - projet not found
     @ExceptionHandler(ProjetNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleProjetNotFound(
             ProjetNotFoundException ex) {
+
+        return new ResponseEntity<>(
+                buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    // 404 - ressource not found
+    @ExceptionHandler(RessourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleRessourceNotFound(
+            RessourceNotFoundException ex) {
+
+        return new ResponseEntity<>(
+                buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    // 404 - tache not found
+    @ExceptionHandler(TacheNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleTacheNotFound(
+            TacheNotFoundException ex) {
 
         return new ResponseEntity<>(
                 buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value()),

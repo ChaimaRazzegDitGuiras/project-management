@@ -37,13 +37,8 @@ public class Tache {
 
     private LocalDate deadline;
 
-    @ManyToMany
-    @JoinTable(
-            name = "tache_ressource",
-            joinColumns = @JoinColumn(name = "tache_id"),
-            inverseJoinColumns = @JoinColumn(name = "ressource_id")
-    )
-    private List<Ressource> ressources;
+    @OneToMany(mappedBy = "tache", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TacheRessource> assignments;
 
     @Transient
     private Long employeId;

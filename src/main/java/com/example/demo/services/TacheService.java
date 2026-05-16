@@ -57,6 +57,17 @@ public class TacheService {
             t.setEtat(EtatTache.A_FAIRE);
         }
 
+        if (t.getAssignments() != null) {
+            t.getAssignments().forEach(a -> {
+                a.setTache(t);
+                if (a.getId() == null) {
+                    a.setId(new TacheRessourceId());
+                }
+                a.getId().setTacheId(t.getId());
+                a.getId().setRessourceId(a.getRessource().getId());
+            });
+        }
+
         return repo.save(t);
     }
 
@@ -98,6 +109,20 @@ public class TacheService {
             Projet p = projetRepo.findById(updated.getProjet().getId())
                     .orElseThrow(() -> new RuntimeException("Projet not found"));
             tache.setProjet(p);
+        }
+
+        // Update assignments
+        if (updated.getAssignments() != null) {
+            tache.getAssignments().clear();
+            updated.getAssignments().forEach(a -> {
+                a.setTache(tache);
+                if (a.getId() == null) {
+                    a.setId(new TacheRessourceId());
+                }
+                a.getId().setTacheId(tache.getId());
+                a.getId().setRessourceId(a.getRessource().getId());
+                tache.getAssignments().add(a);
+            });
         }
 
         return repo.save(tache);

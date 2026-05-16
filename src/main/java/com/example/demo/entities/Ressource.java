@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,11 +18,7 @@ public class Ressource {
 
     private String type;
 
-    private Double cout;
-
-    private Boolean disponibilite;
-
-    // Plusieurs ressources peuvent être utilisées dans plusieurs tâches
-    @ManyToMany(mappedBy = "ressources")
-    private List<Tache> taches;
+    @OneToMany(mappedBy = "ressource", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<TacheRessource> assignments;
 }
